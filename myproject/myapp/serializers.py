@@ -17,6 +17,10 @@ class StudentSerializer(serializers.ModelSerializer):
         model = Student
         fields = ['first_name', 'last_name', 'dob', 'email', 'phone_number','address', 'enrollment_date', 'courses', 'gender', 'student_id']
 
+class StudentQueryParamSerializer(serializers.Serializer):
+
+         first_name = serializers.CharField(max_length=100)
+         last_name = serializers.CharField(max_length=100)
 
 # class StudentSerializer(serializers.Serializer):
 #     # first_name = serializers.CharField(max_length=100)
