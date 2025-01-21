@@ -25,7 +25,9 @@ class Student(models.Model):
     courses = models.ManyToManyField('Course', blank=True)
     gender = models.CharField(max_length=10, choices=[('Male', 'Male'), ('Female', 'Female'), ('Other', 'Other')],
                               blank=True, null=True)
-    student_id = models.CharField(max_length=20, unique=True, null=False, blank=False)  # Unique student ID
+    student_id = models.AutoField(primary_key=True)  # Unique student ID
+    # roll_no = models.IntegerField(null=False, blank=False)
+
 
     def __str__(self):
         return self.first_name
