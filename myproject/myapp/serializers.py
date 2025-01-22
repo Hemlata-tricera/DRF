@@ -11,11 +11,31 @@ class CourseSerializer(serializers.ModelSerializer):
 
 class StudentSerializer(serializers.ModelSerializer):
     # We use the CourseSerializer to handle ManyToManyField
-    courses = CourseSerializer(many=True)
+    # courses = CourseSerializer(many=True)
 
     class Meta:
         model = Student
         fields = ['first_name', 'last_name', 'dob', 'email', 'phone_number','address', 'enrollment_date', 'courses', 'gender', 'student_id']
+
+    def create(self, validated_data):
+        # Extract courses from validated data (assuming it is a list of course ids)
+        courses_data = validated_data.pop('courses', [])
+        student = Student.objects.create(**validated_data)
+        print(student)
+        # Now associate the courses with the student (if any courses are provided)
+        if courses_data:
+            print(courses_data)
+            student.courses.set(courses_data)  # Assign courses to the student
+
+
+        return student
+
+class StudentCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Student
+        exclude = ['courses']
+
+
 
 class StudentQueryParamSerializer(serializers.Serializer):
 
