@@ -31,9 +31,18 @@ class StudentSerializer(serializers.ModelSerializer):
         return student
 
 class StudentCreateSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Student
         exclude = ['courses']
+
+class StudentCreate_newSerializer(serializers.ModelSerializer):
+    courses = serializers.PrimaryKeyRelatedField(queryset=Course.objects.all(), many=True)
+
+    class Meta:
+        model = Student
+        fields = ['first_name', 'last_name', 'dob', 'email', 'address', 'phone_number', 'enrollment_date', 'gender', 'courses']
+
 
 
 

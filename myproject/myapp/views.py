@@ -1,10 +1,10 @@
 # from django.shortcuts import render
-from .models import Student
+from .models import Student, Course
 # from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from .serializers import StudentSerializer, StudentQueryParamSerializer, StudentCreateSerializer
+from .serializers import StudentSerializer, StudentQueryParamSerializer, StudentCreateSerializer, StudentCreate_newSerializer
 from rest_framework.exceptions import NotFound
 from drf_yasg.utils import swagger_auto_schema
 from django.db.models import Q
@@ -52,7 +52,7 @@ def student_detail_view(request, id):
 
 
 
-
+#Create view with .save() metthod
 # @swagger_auto_schema(
 #     method='POST',
 #     request_body=StudentSerializer,
@@ -70,19 +70,37 @@ def student_detail_view(request, id):
 
 
 
+#create view without .save() method
 @swagger_auto_schema(
     method='POST',
-    request_body=StudentCreateSerializer,
-    responses={201: StudentCreateSerializer}  # Successful response will return a serialized Student object
+    request_body=StudentCreate_newSerializer,
+    responses={201: StudentCreate_newSerializer}  # Successful response will return a serialized Student object
 )
 @api_view(['POST'])
 def student_create_view(request):
-    serializer = StudentCreateSerializer(data=request.data)
+    serializer = StudentCreate_newSerializer(data=request.data)
 
     serializer.is_valid(raise_exception=True)
-    print(serializer.validated_data)
-    serializer.save()
-    return Response({'payload': serializer.data, 'message': 'Students added successfully', 'status': 201})
+    # print(serializer.validated_data)
+    # serializer.save()
+    # return Response({'payload': serializer.data, 'message': 'Students added successfully', 'status': 201})
+    student_data = serializer.validated_data
+    student = Student.objects.create(
+        first_name=student_data['first_name'],
+        last_name=student_data['last_name'],
+        dob=student_data['dob'],
+        email=student_data['email'],
+        address=student_data['address'],
+        phone_number=student_data['phone_number'],
+        enrollment_date=student_data['enrollment_date'],
+        gender=student_data['gender'],
+        # courses_id=student_data['courses']
+
+    )
+    if 'courses' in student_data:
+        courses = Course.objects.filter(id__in=student_data['courses'])
+        student.courses.set(courses)
+    return Response({'payload': StudentCreate_newSerializer(student).data, 'message': 'Students added successfully', 'status': 201})
     # return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -106,6 +124,23 @@ def student_update_view(request, student_id):
 
     # Return a response with the updated student data
     return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+@swagger_auto_schema(
+    method='DELETE',
+    request_body=StudentSerializer,
+    responses={201: StudentSerializer}  # Successful response will return a serialized Student object
+)
+@api_view(['DELETE'])
+def student_delete_view(request, student_id):
+
+    student = get_object_or_404(Student, student_id=student_id)
+    student.delete()
+    return Response({'message': f'Student with id {student_id}  has been deleted successfully'
+},status=status.HTTP_200_OK)
+
+
+
 
 
 
