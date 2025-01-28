@@ -1,10 +1,16 @@
-from django.urls import path
+from django.urls import path, include
 from .import views
 # from .views import StudentAPI
+from rest_framework.routers import DefaultRouter
+# Create a router and register our ViewSets with it.
+router = DefaultRouter()
+router.register(r'students', views.StudentViewSet, basename='student')
 
 urlpatterns=[
-     path('students/', views.StudentAPI.as_view()),
-     path('students/<int:pk>/', views.StudentAPI.as_view()),
+     path('', include(router.urls)),
+
+     # path('students/', views.StudentAPI.as_view()),
+     # path('students/<int:pk>/', views.StudentAPI.as_view()),
 
      # path('students/', views.student_list_view, name='student_list'),
     # # path('GET /students/?first_name=Hemlata', views.student_list_view, name='student_list'),
