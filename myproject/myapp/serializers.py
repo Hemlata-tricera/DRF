@@ -26,8 +26,6 @@ class StudentSerializer(serializers.ModelSerializer):
         if courses_data:
             print(courses_data)
             student.courses.set(courses_data)  # Assign courses to the student
-
-
         return student
 
 class StudentCreateSerializer(serializers.ModelSerializer):
@@ -44,12 +42,9 @@ class StudentCreate_newSerializer(serializers.ModelSerializer):
         fields = ['first_name', 'last_name', 'dob', 'email', 'address', 'phone_number', 'enrollment_date', 'gender', 'courses']
 
 
-
-
 class StudentQueryParamSerializer(serializers.Serializer):
-
-         first_name = serializers.CharField(max_length=100)
-         last_name = serializers.CharField(max_length=100)
+    first_name = serializers.CharField(max_length=100)
+    last_name = serializers.CharField(max_length=100)
 
 # class StudentSerializer(serializers.Serializer):
 #     # first_name = serializers.CharField(max_length=100)
