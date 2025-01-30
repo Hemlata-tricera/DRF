@@ -13,99 +13,61 @@ from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 from rest_framework import viewsets
+#USING VIEWSET
 
+
+class StudentViewSet(viewsets.ViewSet):
+    queryset = Student.objects.all()
+
+    def list(self, request):
+        # students = Student.objects.all()
+        serializer = StudentSerializer(self.queryset, many=True)
+        return Response(serializer.data)
+
+    @swagger_auto_schema(request_body=StudentSerializer,operation_description="Create a new Student")
+    def create(self, request):
+         serializer = StudentSerializer(data=request.data)
+         serializer.is_valid(raise_exception=True)
+         serializer.save()
+         return Response(serializer.data)
+
+    def retrieve(self, request, pk):
+        student = get_object_or_404(self.queryset, pk=pk)
+        serializer = StudentSerializer(student)
+        return Response(serializer.data)
+
+    @swagger_auto_schema(request_body=StudentSerializer,operation_description="Update a Student")
+    def update(self, request, pk):
+        student = get_object_or_404(self.queryset, pk=pk)
+        serializer = StudentSerializer(student, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
+
+
+    @swagger_auto_schema(request_body=StudentSerializer,operation_description="Update specific field of Student")
+    def partial_update(self, request, pk):
+        student = get_object_or_404(self.queryset, pk=pk)
+        serializer = StudentSerializer(student, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
+
+
+    def destroy(self, request, pk):
+        student = get_object_or_404(self.queryset, pk=pk)
+        student.delete()
+        return Response(request.data)
+
+
+
+
+#USING MODELVIEWSET
 # class StudentViewSet(viewsets.ModelViewSet):
 #     queryset = Student.objects.all()
 #     serializer_class = StudentSerializer
 
 
-class StudentListAPI(APIView):
-    @swagger_auto_schema(responses={200: StudentSerializer(many=True)})
-    def get(self, request, format=None):
-        students = Student.objects.all()
-        serializer = StudentSerializer(students, many=True)
-        return Response(serializer.data)
-
-    @swagger_auto_schema(request_body=StudentSerializer,operation_description="Create a new Student")
-    def post(self, request):
-        serializer = StudentSerializer(data=request.data)
-
-        if serializer.is_valid():
-            # print(serializer.validated_data)
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    # For GET request: Use manual_parameters to define query parameters
-    # @swagger_auto_schema(manual_parameters=[
-    #     openapi.Parameter('first_name', openapi.IN_QUERY, description="Filter by first name", type=openapi.TYPE_STRING),
-    #     openapi.Parameter('last_name', openapi.IN_QUERY, description="Filter by last name", type=openapi.TYPE_STRING),
-    # ])
-    # def get(self, request):
-    #     serializer = StudentQueryParamSerializer(data=request.GET)
-    #     serializer.is_valid(raise_exception=True)
-    #     print(serializer.validated_data)
-    #     first_name = serializer.validated_data.get('first_name')
-    #     last_name = serializer.validated_data.get('last_name')
-    #
-    #     # Get all students
-    #     students = Student.objects.all()
-    #     print(students)
-    #
-    #     if first_name and last_name:
-    #         students = students.filter(Q(first_name__icontains=first_name) | Q(last_name__icontains=last_name))
-    #
-    #     serializer = StudentSerializer(students, many=True)
-    #     print(serializer.data)
-    #     return Response(serializer.data)
-class StudentDetailAPI(APIView):
-    def get_object(self, pk):
-        try:
-            return Student.objects.get(pk=pk)
-        except Student.DoesNotExist:
-            raise Http404
-
-    @swagger_auto_schema(responses={200: StudentSerializer})
-    def get(self, request, pk, format=None):
-        student = self.get_object(pk)
-        serializer = StudentSerializer(student)
-        return Response(serializer.data)
-
-    @swagger_auto_schema(request_body=StudentSerializer,operation_description="Update a Student")
-    def put(self, request, pk, format=None):
-        student = self.get_object(pk)
-
-         # Deserialize the incoming data and pass the student instance to update
-        serializer = StudentSerializer(student, data=request.data)
-
-        # Check if the data is valid
-        serializer.is_valid(raise_exception=True)
-        # Save the updated student instance
-        serializer.save()
-
-        # Return a response with the updated student data
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-    @swagger_auto_schema(request_body=StudentSerializer,operation_description="Partial Update a Student")
-    def patch(self, request, pk):
-        student = get_object_or_404(Student, student_id=pk)
-
-        # Deserialize the incoming data and pass the student instance to update
-        serializer = StudentSerializer(student, data=request.data, partial=True)
-
-           # Check if the data is valid
-        serializer.is_valid(raise_exception=True)
-            # Save the updated student instance
-        serializer.save()
-
-        # Return a response with the updated student data
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-    def delete(self, request, pk):
-        student = get_object_or_404(Student, student_id=pk)
-        student.delete()
-        return Response({'message': f'Student with id {pk}  has been deleted successfully'
-        },status=status.HTTP_200_OK)
 
 
 
@@ -120,6 +82,123 @@ class StudentDetailAPI(APIView):
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+# Added two different API view classes for LIST view and DETAIL view
+# to improve the understanding of Swagger for better API documentation.
+
+# class StudentListAPI(APIView):
+#     @swagger_auto_schema(responses={200: StudentSerializer(many=True)})
+#     def get(self, request, format=None):
+#         students = Student.objects.all()
+#         serializer = StudentSerializer(students, many=True)
+#         return Response(serializer.data)
+#
+#     @swagger_auto_schema(request_body=StudentSerializer,operation_description="Create a new Student")
+#     def post(self, request):
+#         serializer = StudentSerializer(data=request.data)
+#
+#         if serializer.is_valid():
+#             # print(serializer.validated_data)
+#             serializer.save()
+#             return Response(serializer.data, status=status.HTTP_201_CREATED)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#
+#     # For GET request: Use manual_parameters to define query parameters
+#     # @swagger_auto_schema(manual_parameters=[
+#     #     openapi.Parameter('first_name', openapi.IN_QUERY, description="Filter by first name", type=openapi.TYPE_STRING),
+#     #     openapi.Parameter('last_name', openapi.IN_QUERY, description="Filter by last name", type=openapi.TYPE_STRING),
+#     # ])
+#     # def get(self, request):
+#     #     serializer = StudentQueryParamSerializer(data=request.GET)
+#     #     serializer.is_valid(raise_exception=True)
+#     #     print(serializer.validated_data)
+#     #     first_name = serializer.validated_data.get('first_name')
+#     #     last_name = serializer.validated_data.get('last_name')
+#     #
+#     #     # Get all students
+#     #     students = Student.objects.all()
+#     #     print(students)
+#     #
+#     #     if first_name and last_name:
+#     #         students = students.filter(Q(first_name__icontains=first_name) | Q(last_name__icontains=last_name))
+#     #
+#     #     serializer = StudentSerializer(students, many=True)
+#     #     print(serializer.data)
+#     #     return Response(serializer.data)
+#
+# class StudentDetailAPI(APIView):
+#     def get_object(self, pk):
+#         try:
+#             return Student.objects.get(pk=pk)
+#         except Student.DoesNotExist:
+#             raise Http404
+#
+#     @swagger_auto_schema(responses={200: StudentSerializer})
+#     def get(self, request, pk, format=None):
+#         student = self.get_object(pk)
+#         serializer = StudentSerializer(student)
+#         return Response(serializer.data)
+#
+#     @swagger_auto_schema(request_body=StudentSerializer,operation_description="Update a Student")
+#     def put(self, request, pk, format=None):
+#         student = self.get_object(pk)
+#
+#          # Deserialize the incoming data and pass the student instance to update
+#         serializer = StudentSerializer(student, data=request.data)
+#
+#         # Check if the data is valid
+#         serializer.is_valid(raise_exception=True)
+#         # Save the updated student instance
+#         serializer.save()
+#
+#         # Return a response with the updated student data
+#         return Response(serializer.data, status=status.HTTP_200_OK)
+#
+#     @swagger_auto_schema(request_body=StudentSerializer,operation_description="Partial Update a Student")
+#     def patch(self, request, pk):
+#         student = get_object_or_404(Student, student_id=pk)
+#
+#         # Deserialize the incoming data and pass the student instance to update
+#         serializer = StudentSerializer(student, data=request.data, partial=True)
+#
+#            # Check if the data is valid
+#         serializer.is_valid(raise_exception=True)
+#             # Save the updated student instance
+#         serializer.save()
+#
+#         # Return a response with the updated student data
+#         return Response(serializer.data, status=status.HTTP_200_OK)
+#
+#     def delete(self, request, pk):
+#         student = get_object_or_404(Student, student_id=pk)
+#         student.delete()
+#         return Response({'message': f'Student with id {pk}  has been deleted successfully'
+#         },status=status.HTTP_200_OK)
+#
+#
+#
+#
+
+
+
+
+
+
+
+
+
+#CODE FOR FUNCTION BASE VIEW USING @api_view decorator
 # @swagger_auto_schema(
 #     method='get',
 #     query_serializer=StudentQueryParamSerializer
@@ -277,4 +356,3 @@ class StudentDetailAPI(APIView):
 
 
 
-#ViewSet

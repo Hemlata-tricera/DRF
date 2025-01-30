@@ -3,14 +3,16 @@ from .import views
 # from .views import StudentAPI
 from rest_framework.routers import DefaultRouter
 # Create a router and register our ViewSets with it.
-# router = DefaultRouter()
-# router.register(r'students', views.StudentViewSet, basename='student')
+router = DefaultRouter()
+router.register(r'students', views.StudentViewSet, basename='student')
 
 urlpatterns=[
-     # path('', include(router.urls)),
+     path('', include(router.urls)),
 
-     path('students/', views.StudentListAPI.as_view(), name='student-list'),
-     path('students/<int:pk>/', views.StudentDetailAPI.as_view(), name='student-detail')
+     #URLS FOR APIVIEWSSET
+     # path('students/', views.StudentListAPI.as_view(), name='student-list'),
+     # path('students/<int:pk>/', views.StudentDetailAPI.as_view(), name='student-detail')
+
      # path('students/', views.student_list_view, name='student_list'),
     # # path('GET /students/?first_name=Hemlata', views.student_list_view, name='student_list'),
     # path('get/students-details/<str:id>/', views.student_detail_view, name='student_detail'),
