@@ -14,88 +14,89 @@ from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 from rest_framework import viewsets
 
-class StudentViewSet(viewsets.ModelViewSet):
-    queryset = Student.objects.all()
-    serializer_class = StudentSerializer
+# class StudentViewSet(viewsets.ModelViewSet):
+#     queryset = Student.objects.all()
+#     serializer_class = StudentSerializer
 
 
-# class StudentAPI(APIView):
-#     def get_object(self, pk):
-#         try:
-#             return Student.objects.get(pk=pk)
-#         except Student.DoesNotExist:
-#             raise Http404
-#
-#     def get(self, request, format=None):
-#         students = Student.objects.all()
-#         serializer = StudentSerializer(students, many=True)
-#         return Response(serializer.data)
-#     # For GET request: Use manual_parameters to define query parameters
-#     # @swagger_auto_schema(manual_parameters=[
-#     #     openapi.Parameter('first_name', openapi.IN_QUERY, description="Filter by first name", type=openapi.TYPE_STRING),
-#     #     openapi.Parameter('last_name', openapi.IN_QUERY, description="Filter by last name", type=openapi.TYPE_STRING),
-#     # ])
-#     # def get(self, request):
-#     #     serializer = StudentQueryParamSerializer(data=request.GET)
-#     #     serializer.is_valid(raise_exception=True)
-#     #     print(serializer.validated_data)
-#     #     first_name = serializer.validated_data.get('first_name')
-#     #     last_name = serializer.validated_data.get('last_name')
-#     #
-#     #     # Get all students
-#     #     students = Student.objects.all()
-#     #     print(students)
-#     #
-#     #     if first_name and last_name:
-#     #         students = students.filter(Q(first_name__icontains=first_name) | Q(last_name__icontains=last_name))
-#     #
-#     #     serializer = StudentSerializer(students, many=True)
-#     #     print(serializer.data)
-#     #     return Response(serializer.data)
-#
-#
-#     def post(self, request):
-#         serializer = StudentSerializer(data=request.data)
-#
-#         if serializer.is_valid():
-#             # print(serializer.validated_data)
-#             serializer.save()
-#             return Response(serializer.data, status=status.HTTP_201_CREATED)
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+class StudentAPI(APIView):
+    def get_object(self, pk):
+        try:
+            return Student.objects.get(pk=pk)
+        except Student.DoesNotExist:
+            raise Http404
 
-    # def put(self, request, pk, format=None):
-    #     student = self.get_object(pk)
-    #
-    #      # Deserialize the incoming data and pass the student instance to update
-    #     serializer = StudentSerializer(student, data=request.data)
-    #
-    #     # Check if the data is valid
+    @swagger_auto_schema(responses={200: StudentSerializer(many=True)})
+    def get(self, request, format=None):
+        students = Student.objects.all()
+        serializer = StudentSerializer(students, many=True)
+        return Response(serializer.data)
+    # For GET request: Use manual_parameters to define query parameters
+    # @swagger_auto_schema(manual_parameters=[
+    #     openapi.Parameter('first_name', openapi.IN_QUERY, description="Filter by first name", type=openapi.TYPE_STRING),
+    #     openapi.Parameter('last_name', openapi.IN_QUERY, description="Filter by last name", type=openapi.TYPE_STRING),
+    # ])
+    # def get(self, request):
+    #     serializer = StudentQueryParamSerializer(data=request.GET)
     #     serializer.is_valid(raise_exception=True)
-    #     # Save the updated student instance
-    #     serializer.save()
+    #     print(serializer.validated_data)
+    #     first_name = serializer.validated_data.get('first_name')
+    #     last_name = serializer.validated_data.get('last_name')
     #
-    #     # Return a response with the updated student data
-    #     return Response(serializer.data, status=status.HTTP_200_OK)
+    #     # Get all students
+    #     students = Student.objects.all()
+    #     print(students)
+    #
+    #     if first_name and last_name:
+    #         students = students.filter(Q(first_name__icontains=first_name) | Q(last_name__icontains=last_name))
+    #
+    #     serializer = StudentSerializer(students, many=True)
+    #     print(serializer.data)
+    #     return Response(serializer.data)
 
-    # def patch(self, request):
-    #     student = get_object_or_404(Student, student_id=student_id, partial=True)
-    #
-    #     # Deserialize the incoming data and pass the student instance to update
-    #     serializer = StudentSerializer(student, data=request.data)
-    #
-    #        # Check if the data is valid
-    #     serializer.is_valid(raise_exception=True)
-    #         # Save the updated student instance
-    #     serializer.save()
-    #
-    #     # Return a response with the updated student data
-    #     return Response(serializer.data, status=status.HTTP_200_OK)
+    @swagger_auto_schema(operation_description="Create a new Student")
+    def post(self, request):
+        serializer = StudentSerializer(data=request.data)
 
-    # def delete(self, request):
-    #     student = get_object_or_404(Student, student_id=student_id)
-    #     student.delete()
-    #     return Response({'message': f'Student with id {student_id}  has been deleted successfully'
-    #     },status=status.HTTP_200_OK)
+        if serializer.is_valid():
+            # print(serializer.validated_data)
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def put(self, request, pk, format=None):
+        student = self.get_object(pk)
+
+         # Deserialize the incoming data and pass the student instance to update
+        serializer = StudentSerializer(student, data=request.data)
+
+        # Check if the data is valid
+        serializer.is_valid(raise_exception=True)
+        # Save the updated student instance
+        serializer.save()
+
+        # Return a response with the updated student data
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def patch(self, request, student_id):
+        student = get_object_or_404(Student, student_id=student_id, partial=True)
+
+        # Deserialize the incoming data and pass the student instance to update
+        serializer = StudentSerializer(student, data=request.data)
+
+           # Check if the data is valid
+        serializer.is_valid(raise_exception=True)
+            # Save the updated student instance
+        serializer.save()
+
+        # Return a response with the updated student data
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def delete(self, request):
+        student = get_object_or_404(Student, student_id=student_id)
+        student.delete()
+        return Response({'message': f'Student with id {student_id}  has been deleted successfully'
+        },status=status.HTTP_200_OK)
 
 
 
