@@ -4,7 +4,9 @@ from .import views
 from rest_framework.routers import DefaultRouter
 # Create a router and register our ViewSets with it.
 router = DefaultRouter()
-router.register(r'students', views.StudentViewSet, basename='student')
+
+# router.register(r'students', views.StudentViewSet, basename='student') # ModelViewSet Endpoint
+router.register(r'students', views.StudentReadOnlyViewSet, basename='student') # ReadOnlyViewSet Endpoint
 
 urlpatterns=[
      path('', include(router.urls)),

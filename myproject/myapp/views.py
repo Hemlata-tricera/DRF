@@ -13,52 +13,53 @@ from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 from rest_framework import viewsets
+from rest_framework.viewsets import ReadOnlyModelViewSet
+
 #USING VIEWSET
-
-
-class StudentViewSet(viewsets.ViewSet):
-    queryset = Student.objects.all()
-
-    def list(self, request):
-        # students = Student.objects.all()
-        serializer = StudentSerializer(self.queryset, many=True)
-        return Response(serializer.data)
-
-    @swagger_auto_schema(request_body=StudentSerializer,operation_description="Create a new Student")
-    def create(self, request):
-         serializer = StudentSerializer(data=request.data)
-         serializer.is_valid(raise_exception=True)
-         serializer.save()
-         return Response(serializer.data)
-
-    def retrieve(self, request, pk):
-        student = get_object_or_404(self.queryset, pk=pk)
-        serializer = StudentSerializer(student)
-        return Response(serializer.data)
-
-    @swagger_auto_schema(request_body=StudentSerializer,operation_description="Update a Student")
-    def update(self, request, pk):
-        student = get_object_or_404(self.queryset, pk=pk)
-        serializer = StudentSerializer(student, data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data)
-
-
-    @swagger_auto_schema(request_body=StudentSerializer,operation_description="Update specific field of Student")
-    def partial_update(self, request, pk):
-        student = get_object_or_404(self.queryset, pk=pk)
-        serializer = StudentSerializer(student, data=request.data, partial=True)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data)
-
-
-    def destroy(self, request, pk):
-        student = get_object_or_404(self.queryset, pk=pk)
-        student.delete()
-        return Response(request.data)
-
+# class StudentViewSet(viewsets.ViewSet):
+#     queryset = Student.objects.all()
+#
+#     def list(self, request):
+#         # students = Student.objects.all()
+#         serializer = StudentSerializer(self.queryset, many=True)
+#         return Response(serializer.data)
+#
+#     @swagger_auto_schema(request_body=StudentSerializer,operation_description="Create a new Student")
+#     def create(self, request):
+#          serializer = StudentSerializer(data=request.data)
+#          serializer.is_valid(raise_exception=True)
+#          serializer.save()
+#          return Response(serializer.data)
+#
+#     def retrieve(self, request, pk):
+#         student = get_object_or_404(self.queryset, pk=pk)
+#         serializer = StudentSerializer(student)
+#         return Response(serializer.data)
+#
+#     @swagger_auto_schema(request_body=StudentSerializer,operation_description="Update a Student")
+#     def update(self, request, pk):
+#         student = get_object_or_404(self.queryset, pk=pk)
+#         serializer = StudentSerializer(student, data=request.data)
+#         serializer.is_valid(raise_exception=True)
+#         serializer.save()
+#         return Response(serializer.data)
+#
+#
+#     @swagger_auto_schema(request_body=StudentSerializer, tags=["Students"])
+#     def partial_update(self, request, pk):
+#         """ Partial update"""
+#         student = get_object_or_404(self.queryset, pk=pk)
+#         serializer = StudentSerializer(student, data=request.data, partial=True)
+#         serializer.is_valid(raise_exception=True)
+#         serializer.save()
+#         return Response(serializer.data)
+#
+#
+#     def destroy(self, request, pk):
+#         student = get_object_or_404(self.queryset, pk=pk)
+#         student.delete()
+#         return Response(request.data)
+#
 
 
 
@@ -67,6 +68,10 @@ class StudentViewSet(viewsets.ViewSet):
 #     queryset = Student.objects.all()
 #     serializer_class = StudentSerializer
 
+# USING ReadOnlyModelViewSet
+class StudentReadOnlyViewSet(ReadOnlyModelViewSet):
+    serializer_class = StudentSerializer
+    queryset = Student.objects.all()
 
 
 
