@@ -1,7 +1,8 @@
 from django.urls import path, include
 from .import views
 # from .views import StudentAPI
-from .views import StudentGeneric,StudentGeneric1
+# from .views import StudentGeneric,StudentGeneric1, CreateListStudents
+from .views import CreateListStudents, RetrieveUpdateDeleteIStudent
 from rest_framework.routers import DefaultRouter
 # Create a router and register our ViewSets with it.
 router = DefaultRouter()
@@ -11,9 +12,11 @@ router = DefaultRouter()
 
 urlpatterns=[
      # path('', include(router.urls)),  # for router
-     path('generic-student/', StudentGeneric.as_view()),
-     path('generic-student/<int:student_id>/', StudentGeneric1.as_view()),
-
+     # path('generic-student/', StudentGeneric.as_view()), #Generic View
+     # path('generic-student/<int:student_id>/', StudentGeneric1.as_view()), #Generic View
+     path('mixins-students/', CreateListStudents.as_view()),  # Generic View
+     path('mixins-student/<int:student_id>/', RetrieveUpdateDeleteIStudent.as_view()), #Generic View
+     # path('student/<int:student_id>/', MyRetrieveCreateAPIView.as_view()), #Generic View
 
      #URLS FOR APIVIEWSSET
      # path('students/', views.StudentListAPI.as_view(), name='student-list'),

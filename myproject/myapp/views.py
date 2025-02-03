@@ -15,19 +15,70 @@ from rest_framework.views import APIView
 from rest_framework import viewsets
 from rest_framework.viewsets import ReadOnlyModelViewSet
 from rest_framework import generics
+from rest_framework import mixins
+from rest_framework.generics import GenericAPIView
 
 
-class StudentGeneric(generics.ListAPIView, generics.CreateAPIView):
+
+
+#USING Mixins
+# ListModelMixin and CreateModelMixin
+class CreateListStudents(mixins.ListModelMixin, mixins.CreateModelMixin, GenericAPIView):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
 
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
 
-class StudentGeneric1(generics.UpdateAPIView, generics.DestroyAPIView):
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+
+
+class RetrieveUpdateDeleteIStudent(mixins.RetrieveModelMixin,
+    mixins.UpdateModelMixin,
+    mixins.DestroyModelMixin,GenericAPIView):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
     lookup_field = 'student_id'
 
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
 
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+    def patch(self, request, *args, **kwargs):
+        return self.partial_update(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)
+
+#Trying to create custom mixing//incomplete//ignore
+# class MyRetrieveCreateAPIView(mixins.RetrieveModelMixin,mixins.CreateModelMixin,GenericAPIView):
+#     queryset = Student.objects.all()
+#     serializer_class = StudentSerializer
+#     lookup_field = 'student_id'
+#
+#
+#     def get(self,request, *args, **kwargs):
+#         return self.retrieve(request, *args, **kwargs)
+#
+#     def post(self, request, *args, **kwargs):
+#         return self.create(request, *args, **kwargs)
+
+
+
+
+
+#USING Generic Views
+# class StudentGeneric(generics.ListAPIView, generics.CreateAPIView):
+#     queryset = Student.objects.all()
+#     serializer_class = StudentSerializer
+#
+# class StudentGeneric1(generics.UpdateAPIView, generics.DestroyAPIView):
+#     queryset = Student.objects.all()
+#     serializer_class = StudentSerializer
+#     lookup_field = 'student_id'
 
 
 #USING VIEWSET
