@@ -14,6 +14,21 @@ from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 from rest_framework import viewsets
 from rest_framework.viewsets import ReadOnlyModelViewSet
+from rest_framework import generics
+
+
+class StudentGeneric(generics.ListAPIView, generics.CreateAPIView):
+    queryset = Student.objects.all()
+    serializer_class = StudentSerializer
+
+
+class StudentGeneric1(generics.UpdateAPIView, generics.DestroyAPIView):
+    queryset = Student.objects.all()
+    serializer_class = StudentSerializer
+    lookup_field = 'student_id'
+
+
+
 
 #USING VIEWSET
 # class StudentViewSet(viewsets.ViewSet):
@@ -69,10 +84,10 @@ from rest_framework.viewsets import ReadOnlyModelViewSet
 #     serializer_class = StudentSerializer
 
 # USING ReadOnlyModelViewSet
-class StudentReadOnlyViewSet(ReadOnlyModelViewSet):
-    serializer_class = StudentSerializer
-    queryset = Student.objects.all()
-
+# class StudentReadOnlyViewSet(ReadOnlyModelViewSet):
+#     serializer_class = StudentSerializer
+#     queryset = Student.objects.all()
+#
 
 
 
