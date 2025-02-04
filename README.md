@@ -2,7 +2,7 @@
 A simple Django Rest Framework application to manage student data. This application provides CRUD functionality for students' information like name, enrollment_date, course, gender,etc.
 
 ##Features
-_Add a new student.
--View details of all students.
+- Add a new student.
+- View details of all students.
 -Edit student details.
 -Delete a student.
