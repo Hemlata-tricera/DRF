@@ -4,5 +4,5 @@ A simple Django Rest Framework application to manage student data. This applicat
 ##Features
 - Add a new student.
 - View details of all students.
--Edit student details.
--Delete a student.
+- Edit student details.
+- Delete a student.
