@@ -52,7 +52,6 @@ class RetrieveUpdateDeleteIStudent(mixins.RetrieveModelMixin,
 
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
-
 #Trying to create custom mixing//incomplete//ignore
 # class MyRetrieveCreateAPIView(mixins.RetrieveModelMixin,mixins.CreateModelMixin,GenericAPIView):
 #     queryset = Student.objects.all()
