@@ -18,7 +18,7 @@ from rest_framework import generics
 from rest_framework import mixins
 from rest_framework.generics import GenericAPIView
 from rest_framework.authentication import BasicAuthentication
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
 
 
 
@@ -36,7 +36,7 @@ class CreateListStudents(mixins.ListModelMixin, mixins.CreateModelMixin, Generic
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
     authentication_classes = [BasicAuthentication]
-    permission_classes = [AllowAny]
+    permission_classes = [IsAdminUser]
 
 
 class RetrieveUpdateDeleteIStudent(mixins.RetrieveModelMixin,
