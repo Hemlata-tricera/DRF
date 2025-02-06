@@ -1,5 +1,5 @@
 from django.urls import path, include
-from .import views
+# from .import views
 # from .views import StudentAPI
 # from .views import StudentGeneric,StudentGeneric1, CreateListStudents
 from .views import CreateListStudents, RetrieveUpdateDeleteIStudent

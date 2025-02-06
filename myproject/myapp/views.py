@@ -8,7 +8,7 @@ from .serializers import StudentSerializer, StudentQueryParamSerializer, Student
 from django.http import Http404
 from rest_framework.exceptions import NotFound
 from drf_yasg.utils import swagger_auto_schema
-from drf_yasg import openapi
+# from drf_yasg import openapigit
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
@@ -17,6 +17,9 @@ from rest_framework.viewsets import ReadOnlyModelViewSet
 from rest_framework import generics
 from rest_framework import mixins
 from rest_framework.generics import GenericAPIView
+# from rest_framework.authentication import BasicAuthentication
+# from rest_framework.permissions import IsAuthenticated
+
 
 
 
@@ -32,6 +35,8 @@ class CreateListStudents(mixins.ListModelMixin, mixins.CreateModelMixin, Generic
 
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
+    # authentication_classes = [BasicAuthentication]
+    # permission_classes = [IsAuthenticated]
 
 
 class RetrieveUpdateDeleteIStudent(mixins.RetrieveModelMixin,
@@ -231,7 +236,7 @@ class RetrieveUpdateDeleteIStudent(mixins.RetrieveModelMixin,
 #         serializer.is_valid(raise_exception=True)
 #         # Save the updated student instance
 #         serializer.save()
-#
+
 #         # Return a response with the updated student data
 #         return Response(serializer.data, status=status.HTTP_200_OK)
 #
