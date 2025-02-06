@@ -17,8 +17,8 @@ from rest_framework.viewsets import ReadOnlyModelViewSet
 from rest_framework import generics
 from rest_framework import mixins
 from rest_framework.generics import GenericAPIView
-# from rest_framework.authentication import BasicAuthentication
-# from rest_framework.permissions import IsAuthenticated
+from rest_framework.authentication import BasicAuthentication
+from rest_framework.permissions import IsAuthenticated, AllowAny
 
 
 
@@ -35,8 +35,8 @@ class CreateListStudents(mixins.ListModelMixin, mixins.CreateModelMixin, Generic
 
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
-    # authentication_classes = [BasicAuthentication]
-    # permission_classes = [IsAuthenticated]
+    authentication_classes = [BasicAuthentication]
+    permission_classes = [AllowAny]
 
 
 class RetrieveUpdateDeleteIStudent(mixins.RetrieveModelMixin,
