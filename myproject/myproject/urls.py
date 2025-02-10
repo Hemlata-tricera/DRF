@@ -47,7 +47,7 @@ urlpatterns = [
     path('api/', include(router.urls)),  # Register your app's API routes here
 
     path('', include('myapp.urls')),  # Include your app's URLs
-    path('auth/', include('rest_framework.urls', namespace='rest_framework')),
+    path('auth/', include('rest_framework.urls', namespace='rest_framework')), # for session authentication(Isauthenticated permission)
     # re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
