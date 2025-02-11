@@ -17,11 +17,10 @@ from rest_framework.viewsets import ReadOnlyModelViewSet
 from rest_framework import generics
 from rest_framework import mixins
 from rest_framework.generics import GenericAPIView
-from rest_framework.authentication import SessionAuthentication
+# from rest_framework.authentication import SessionAuthentication
+from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
 from .custompermissions import Mypermission
-
-
 
 
 
@@ -37,8 +36,8 @@ class CreateListStudents(mixins.ListModelMixin, mixins.CreateModelMixin, Generic
 
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
-    authentication_classes = [SessionAuthentication]
-    permission_classes = [Mypermission]
+    # authentication_classes = [SessionAuthentication]
+    # permission_classes = [Mypermission]
 
 
 class RetrieveUpdateDeleteIStudent(mixins.RetrieveModelMixin,

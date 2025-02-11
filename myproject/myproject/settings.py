@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'rest_framework',  # this line for DRF
     'myapp',
     'drf_yasg',
+    'rest_framework.authtoken',
 
 ]
 

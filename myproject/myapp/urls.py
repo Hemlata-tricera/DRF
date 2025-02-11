@@ -6,6 +6,9 @@ from .views import CreateListStudents, RetrieveUpdateDeleteIStudent
 from rest_framework.routers import DefaultRouter
 # Create a router and register our ViewSets with it.
 router = DefaultRouter()
+from rest_framework.authtoken.views import obtain_auth_token
+from myapp.auth import CustomAuthToken
+
 
 # router.register(r'students', views.StudentViewSet, basename='student') # ModelViewSet Endpoint
 # router.register(r'students', views.StudentReadOnlyViewSet, basename='student') # ReadOnlyViewSet Endpoint
@@ -17,6 +20,8 @@ urlpatterns=[
      path('mixins-students/', CreateListStudents.as_view()),  # Generic View
      path('mixins-student/<int:student_id>/', RetrieveUpdateDeleteIStudent.as_view()), #Generic View
      # path('student/<int:student_id>/', MyRetrieveCreateAPIView.as_view()), #Generic View
+     # path('gettoken/', obtain_auth_token, name='api_token_auth'),
+     path('gettoken/', CustomAuthToken.as_view(), name='CustomAuthToken'),
 
      #URLS FOR APIVIEWSSET
      # path('students/', views.StudentListAPI.as_view(), name='student-list'),
