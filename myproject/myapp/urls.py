@@ -6,8 +6,11 @@ from .views import CreateListStudents, RetrieveUpdateDeleteIStudent
 from rest_framework.routers import DefaultRouter
 # Create a router and register our ViewSets with it.
 router = DefaultRouter()
-from rest_framework.authtoken.views import obtain_auth_token
-from myapp.auth import CustomAuthToken
+# from rest_framework.authtoken.views import obtain_auth_token
+# from myapp.auth import CustomAuthToken
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from rest_framework_simplejwt.views import TokenVerifyView
+
 
 
 # router.register(r'students', views.StudentViewSet, basename='student') # ModelViewSet Endpoint
@@ -21,7 +24,10 @@ urlpatterns=[
      path('mixins-student/<int:student_id>/', RetrieveUpdateDeleteIStudent.as_view()), #Generic View
      # path('student/<int:student_id>/', MyRetrieveCreateAPIView.as_view()), #Generic View
      # path('gettoken/', obtain_auth_token, name='api_token_auth'),
-     path('gettoken/', CustomAuthToken.as_view(), name='CustomAuthToken'),
+     # path('gettoken/', CustomAuthToken.as_view(), name='CustomAuthToken'),
+     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),  # Get access & refresh token
+     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),  # Refresh access token
+     path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
 
      #URLS FOR APIVIEWSSET
      # path('students/', views.StudentListAPI.as_view(), name='student-list'),

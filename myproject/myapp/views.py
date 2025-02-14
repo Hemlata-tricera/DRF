@@ -21,6 +21,7 @@ from rest_framework.generics import GenericAPIView
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
 from .custompermissions import Mypermission
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 
 
@@ -36,8 +37,8 @@ class CreateListStudents(mixins.ListModelMixin, mixins.CreateModelMixin, Generic
 
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
-    # authentication_classes = [SessionAuthentication]
-    # permission_classes = [Mypermission]
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
 
 
 class RetrieveUpdateDeleteIStudent(mixins.RetrieveModelMixin,
